@@ -233,8 +233,9 @@ value})``. Possible options are:
     Version 0.1 default was `@`.
   * `charkey` (default: `_`): Prefix that is used to access the character
     content. Version 0.1 default was `#`.
-  * commentkey (default: `%`): Prefix that is used to access the comments
+  * `commentkey` (default: `%`): Prefix that is used to access the comments
    (retained in an array).
+   Added in 0.4.9 mod.
   * `explicitCharkey` (default: `false`)
   * `trim` (default: `false`): Trim the whitespace at the beginning and end of
     text nodes.
@@ -248,6 +249,7 @@ value})``. Possible options are:
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
     text nodes.
   * `ignoreComments` (default: `false`): Ignore all comments and do not store them.
+     Added in 0.4.9 mod.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child
     attribute object. This option is ignored if `ignoreAttrs` is `false`.
@@ -361,33 +363,3 @@ is and preserves more information. The last major change was to enable
 sub-tag into a tag, xml2js >= 0.2 returns an array even if the array just
 includes one element. This is useful when dealing with APIs that return
 variable amounts of subtags.
-
-Running tests, development
-==========================
-
-[![Build Status](https://secure.travis-ci.org/Leonidas-from-XIV/node-xml2js.png?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
-[![Coverage Status](https://coveralls.io/repos/Leonidas-from-XIV/node-xml2js/badge.svg?branch=)](https://coveralls.io/r/Leonidas-from-XIV/node-xml2js?branch=master)
-[![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml2js.png)](https://david-dm.org/Leonidas-from-XIV/node-xml2js)
-
-The development requirements are handled by npm, you just need to install them.
-We also have a number of unit tests, they can be run using `npm test` directly
-from the project root. This runs zap to discover all the tests and execute
-them.
-
-If you like to contribute, keep in mind that `xml2js` is written in
-CoffeeScript, so don't develop on the JavaScript files that are checked into
-the repository for convenience reasons. Also, please write some unit test to
-check your behaviour and if it is some user-facing thing, add some
-documentation to this README, so people will know it exists. Thanks in advance!
-
-Getting support
-===============
-
-Please, if you have a problem with the library, first make sure you read this
-README. If you read this far, thanks, you're good. Then, please make sure your
-problem really is with `xml2js`. It is? Okay, then I'll look at it. Send me a
-mail and we can talk. Please don't open issues, as I don't think that is the
-proper forum for support problems. Some problems might as well really be bugs
-in `xml2js`, if so I'll let you know to open an issue instead :)
-
-But if you know you really found a bug, feel free to open an issue instead.
