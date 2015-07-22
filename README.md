@@ -247,6 +247,7 @@ value})``. Possible options are:
     true; otherwise an array is created only if there is more than one.
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
     text nodes.
+  * `ignoreComments` (default: `false`): Ignore all comments and do not store them.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child
     attribute object. This option is ignored if `ignoreAttrs` is `false`.

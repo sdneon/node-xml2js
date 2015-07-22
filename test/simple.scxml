@@ -1,0 +1,8 @@
+<scxml version="0.9" xmlns="http://www.w3.org/2005/07/scxml"><!--   node-size-and-position x=0 y=0 w=656 h=574  -->
+ <state id="Initial"><!--   node-size-and-position x=309 y=157 w=75 h=75  -->
+  <transition target="End"><!--   edge-path [End]  x=460 y=270  --></transition>
+ </state>
+ <state id="End"><!--   node-size-and-position x=310 y=320 w=75 h=75  -->
+  <transition target="Initial"><!--   edge-path [Initial]  x=240 y=260  --></transition>
+ </state>
+</scxml>
