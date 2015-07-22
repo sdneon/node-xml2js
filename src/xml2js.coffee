@@ -42,6 +42,12 @@ exports.defaults =
     attrkey: "@"
     # set default char object key
     charkey: "#"
+    # SD: retain comments in an array
+    # set default comment object key
+    commentkey: "%"
+    # ignore all comments regardless
+    ignoreComments: false
+
     # always put child nodes in an array
     explicitArray: false
     # ignore all attributes regardless
@@ -71,6 +77,12 @@ exports.defaults =
     normalizeTags: false
     attrkey: "$"
     charkey: "_"
+    # SD: retain comments in an array
+    # set default comment object key
+    commentkey: "%"
+    # ignore all comments regardless
+    ignoreComments: false
+
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
@@ -109,9 +121,12 @@ class exports.Builder
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
+  # SD: modified to restore comments
   buildObject: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentkey = @options.commentkey # SD
+    ignoreComments = @options.ignoreComments
 
     # If there is a sane-looking first element to use as the root,
     # and the user hasn't specified a non-default rootName,
@@ -145,6 +160,13 @@ class exports.Builder
               element = element.raw wrapCDATA child
             else
               element = element.txt child
+
+          # SD: Case #6 Comment
+          else if key is commentkey
+            if !ignoreComments and typeof child is "object"
+              # Inserts comment
+              for own attr, value of child
+                element = element.comment(value)
 
           # Case #3 Array data
           else if Array.isArray child
@@ -250,6 +272,7 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentkey = @options.commentkey # SD
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -270,6 +293,15 @@ class exports.Parser extends events.EventEmitter
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
+
+    # SD: retain comments in an array
+    @saxParser.oncomment = (node) =>
+      if @options.ignoreComments or stack.length <= 0
+        return
+      s = stack[stack.length - 1]
+      if not s[commentkey]
+        s[commentkey] = []
+      s[commentkey].push(node)
 
     @saxParser.onclosetag = =>
       obj = stack.pop()
