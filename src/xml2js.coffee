@@ -47,6 +47,11 @@ exports.defaults =
     commentkey: "%"
     # ignore all comments regardless
     ignoreComments: false
+    # SD: retain processing instruction in an array
+    # set default processing instruction object key
+    procinstkey: "?"
+    # ignore all processing instruction regardless
+    ignoreProcInst: false
 
     # always put child nodes in an array
     explicitArray: false
@@ -82,6 +87,11 @@ exports.defaults =
     commentkey: "%"
     # ignore all comments regardless
     ignoreComments: false
+    # SD: retain processing instruction in an array
+    # set default processing instruction object key
+    procinstkey: "?"
+    # ignore all processing instruction regardless
+    ignoreProcInst: false
 
     explicitArray: true
     ignoreAttrs: false
@@ -121,12 +131,14 @@ class exports.Builder
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
-  # SD: modified to restore comments
+  # SD: modified to restore comments & processing instruction
   buildObject: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
     commentkey = @options.commentkey # SD
     ignoreComments = @options.ignoreComments
+    procinstkey = @options.procinstkey
+    ignoreProcInst = @options.ignoreProcInst
 
     # If there is a sane-looking first element to use as the root,
     # and the user hasn't specified a non-default rootName,
@@ -167,6 +179,14 @@ class exports.Builder
               # Inserts comment
               for own attr, value of child
                 element = element.comment(value)
+
+          # SD: Case #7 Processing Instruction
+          else if key is procinstkey
+            if !ignoreProcInst and typeof child is "object"
+              # Inserts processing instruction
+              for own attr, value of child
+                if value and typeof value is "object"
+                  element = element.instruction(value.name, value.body)
 
           # Case #3 Array data
           else if Array.isArray child
@@ -273,6 +293,7 @@ class exports.Parser extends events.EventEmitter
     attrkey = @options.attrkey
     charkey = @options.charkey
     commentkey = @options.commentkey # SD
+    procinstkey = @options.procinstkey
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -299,9 +320,14 @@ class exports.Parser extends events.EventEmitter
       if @options.ignoreComments or stack.length <= 0
         return
       s = stack[stack.length - 1]
-      if not s[commentkey]
-        s[commentkey] = []
-      s[commentkey].push(node)
+      @assignOrPush s, commentkey, node
+
+    # SD: retain processing instruction in an array
+    @saxParser.onprocessinginstruction = (node) =>
+      if @options.ignoreProcInst or stack.length <= 0
+        return
+      s = stack[stack.length - 1]
+      @assignOrPush s, procinstkey, node
 
     @saxParser.onclosetag = =>
       obj = stack.pop()

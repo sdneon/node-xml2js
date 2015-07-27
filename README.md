@@ -234,7 +234,12 @@ value})``. Possible options are:
   * `charkey` (default: `_`): Prefix that is used to access the character
     content. Version 0.1 default was `#`.
   * `commentkey` (default: `%`): Prefix that is used to access the comments
-   (retained in an array).
+   (<!-- ... --> in xml) (retained in an array, unless `explicitArray` is `false`).
+   Added in 0.4.9 mod.
+  * `procinstkey` (default: `?`): Prefix that is used to access the processing
+   instructions (<?instruction-name ...content... ?> in xml) (retained in an array,
+   unless `explicitArray` is `false`). Their contents are not parsed as
+   their syntax varies according to the instruction.
    Added in 0.4.9 mod.
   * `explicitCharkey` (default: `false`)
   * `trim` (default: `false`): Trim the whitespace at the beginning and end of
@@ -249,6 +254,9 @@ value})``. Possible options are:
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
     text nodes.
   * `ignoreComments` (default: `false`): Ignore all comments and do not store them.
+     Added in 0.4.9 mod.
+  * `ignoreProcInst` (default: `false`): Ignore all processing instructions
+     and do not store them.
      Added in 0.4.9 mod.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child

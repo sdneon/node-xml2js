@@ -4,5 +4,11 @@
  </state>
  <state id="End"><!--   node-size-and-position x=310 y=320 w=75 h=75  -->
   <transition target="Initial"><!--   edge-path [Initial]  x=240 y=260  --></transition>
+  <single><once/></single>
  </state>
+ <?procInst1 some params?>
+ <?procInst2 param1="value1" param2="value2"?>
+ <singleToo>
+  <?procInst3 one of it ?>
+ </singleToo>
 </scxml>
